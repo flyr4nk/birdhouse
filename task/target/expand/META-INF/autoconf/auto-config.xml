@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config description="自动配置：opensql-task">
+    <group name="web" >
+  		<property name="birdhouse.loggingRoot" defaultValue="${birdhouse.output}/logs" description="log root "/>
+	    <property name="birdhouse.loggingLevel" defaultValue="debug" description="log level"/>
+    </group>
+    
+    <script>
+        <generate template="log4j.xml.vm" destfile="WORLDS-INF/classes/task/log4j.xml" charset="GBK"/>
+		
+		<generate template="webx/webx.xml" destfile="WORLDS-INF/classes/task/webx/webx.xml"  charset="GBK" />
+		<generate template="webx/bean/task-service.xml" destfile="WORLDS-INF/classes/task/webx/bean/task-service.xml"  charset="GBK" />
+		<generate template="webx/common/resources.xml" destfile="WORLDS-INF/classes/task/webx/common/resources.xml"  charset="GBK" />
+		<generate template="webx/common/webx-component-and-root.xml" destfile="WORLDS-INF/classes/task/webx/common/webx-component-and-root.xml"  charset="GBK" />
+     </script>
+</config>

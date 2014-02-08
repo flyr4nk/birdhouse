@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.alibaba.china.app</groupId>
+		<artifactId>opensql</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>opensql.task</artifactId>
+	<packaging>jar</packaging>
+	<groupId>com.alibaba.china.app</groupId>
+	<name>task</name>
+	<description>Made by manually</description>
+	<dependencies>
+	<!-- 图片银行-->
+	 <dependency>     
+			<groupId>com.alibaba.china.shared</groupId>   
+			<artifactId>ibank.service.store</artifactId>   
+			<version>1.0.0-SNAPSHOT</version>
+	 </dependency> 
+       <dependency>
+            <groupId>com.alibaba.external</groupId>
+            <artifactId>xml.axis2</artifactId>
+       </dependency>
+	 <dependency>
+			<groupId>com.alibaba.china.app</groupId>
+			<artifactId>opensql.biz.common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
+	 </dependency>
+	 <dependency>
+			<groupId>com.alibaba.china.app</groupId>
+			<artifactId>opensql.dal</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
+	 </dependency>
+	 <dependency>
+			<groupId>com.alibaba.china.app</groupId>
+			<artifactId>opensql.common.config</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
+	 </dependency>
+ 
+	<dependency>
+			<groupId>com.alibaba.shared</groupId>
+			<artifactId>toolkit.service.spring</artifactId>
+			<type>jar</type>
+	 </dependency>
+	 <dependency>
+			<groupId>com.alibaba.shared</groupId>
+			<artifactId>toolkit.service.resource</artifactId>
+			<type>jar</type>
+	 </dependency>
+	<dependency>
+		    <groupId>com.alibaba.external</groupId>
+		    <artifactId>jakarta.commons.dbcp</artifactId>
+		    <type>jar</type>
+	</dependency>
+	 <dependency>
+		     <groupId>com.alibaba.external</groupId>
+		       <artifactId>jakarta.commons.pool</artifactId>
+		       <type>jar</type>
+	 </dependency>
+	 <dependency>
+              <groupId>com.alibaba.external</groupId>
+              <artifactId>jdbc.oracle</artifactId>
+              <version>11.1.0.7</version>
+	 </dependency>
+	 
+	<dependency>
+		<groupId>com.alibaba.china.shared</groupId>
+		<artifactId>pilot</artifactId>
+		<type>jar</type>
+	</dependency>
+		
+		 
+	</dependencies>
+
+	<properties>
+		<uberjar_final_name>${pom.artifactId}-uber.jar</uberjar_final_name>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includeTypes>jar</includeTypes>
+					<overWriteSnapshots>true</overWriteSnapshots>
+					<type>jar</type>
+					<outputDirectory>${project.build.directory}/lib</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<mkdir dir="${release_directory}" />
+								<zip destfile="${release_directory}/${uberjar_final_name}">
+									<zipfileset dir="${project.build.outputDirectory}/com"
+										includes="**" prefix="WORLDS-INF/classes/com" />
+									<zipfileset dir="${project.build.outputDirectory}/task"
+										includes="**" prefix="WORLDS-INF/classes/task" />
+									<zipfileset dir="${project.build.outputDirectory}/templates"
+										includes="**" prefix="WORLDS-INF/templates" />
+									<zipfileset dir="${project.build.outputDirectory}/META-INF"
+										includes="**" prefix="META-INF" />
+									<zipfileset dir="${project.build.directory}/lib"
+										includes="**" prefix="WORLDS-INF/lib" />
+								</zip>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>release</value>
+				</property>
+			</activation>
+			<properties>
+				<release_directory>${project.parent.build.directory}</release_directory>
+			</properties>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<property>
+					<name>env</name>
+					<value>!release</value>
+				</property>
+			</activation>
+			<properties>
+				<release_directory>${project.build.directory}</release_directory>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.alibaba.maven.plugins</groupId>
+						<artifactId>maven-autoconf-plugin</artifactId>
+						<version>0.3-alpha-7</version>
+						<executions>
+							<execution>
+								<id>config-package</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>config</goal>
+								</goals>
+								<configuration>
+									<destFiles>
+										<destFile>${release_directory}/${uberjar_final_name}</destFile>
+									</destFiles>
+									<includeDescriptorPatterns>
+										<includeDescriptorPattern>**/META-INF/autoconf/auto-config.xml</includeDescriptorPattern>
+									</includeDescriptorPatterns>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack-package</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<unzip dest="${project.build.directory}/expand"
+											src="${project.build.directory}/${uberjar_final_name}" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="Action" >
+
+  <typeAlias alias="actionDO" type="com.hlx.birdhouse.dal.biz.dal.dataobject.ActionDO" />
+
+  <resultMap id="actionDOResultMap" class="actionDO" >
+    <result property="id" column="id" />
+    <result property="wid" column="wid" />
+    <result property="eventName" column="event_name" />
+    <result property="x1" column="x1" />
+    <result property="y1" column="y1" />
+    <result property="x2" column="x2" />
+    <result property="y2" column="y2" />
+    <result property="strvalue" column="strValue" />
+    <result property="gmtcreate" column="gmtCreate" />
+    <result property="gmtmodified" column="gmtModified" />
+    <result property="waitTime" column="waitTime" />
+  </resultMap>
+
+  <sql id="action_columns" >
+    a1.id, a1.wid, a1.event_name, a1.x1, a1.y1, a1.x2, a1.y2, a1.strValue, a1.gmtCreate, 
+      a1.gmtModified,a1.waitTime
+  </sql>
+
+  <sql id="action_do_columns" >
+    a1.id, a1.wid, a1.event_name, a1.x1, a1.y1, a1.x2, a1.y2, a1.strValue, a1.gmtCreate, 
+      a1.gmtModified,a1.waitTime
+  </sql>
+
+  <sql id="queryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="eventName" prepend="AND" >
+        <![CDATA[  
+        event_name = #eventName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x1" prepend="AND" >
+        <![CDATA[  
+        x1 = #x1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y1" prepend="AND" >
+        <![CDATA[  
+        y1 = #y1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x2" prepend="AND" >
+        <![CDATA[  
+        x2 = #x2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y2" prepend="AND" >
+        <![CDATA[  
+        y2 = #y2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="AND" >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="AND" >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <sql id="doQueryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="eventName" prepend="AND" >
+        <![CDATA[  
+        event_name = #eventName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x1" prepend="AND" >
+        <![CDATA[  
+        x1 = #x1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y1" prepend="AND" >
+        <![CDATA[  
+        y1 = #y1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x2" prepend="AND" >
+        <![CDATA[  
+        x2 = #x2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y2" prepend="AND" >
+        <![CDATA[  
+        y2 = #y2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="AND" >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="AND" >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <insert id="insert" parameterClass="actionDO" >
+    INSERT INTO action( id, wid, event_name, x1, y1, x2, y2, strValue, gmtCreate, 
+      gmtModified,waitTime)
+     VALUES ( #id#, #wid#, #eventName#, #x1#, #y1#, #x2#, #y2#, #strvalue#, now(), 
+      now(),#waitTime#)
+    <selectKey keyProperty="id" resultClass="java.lang.Integer" >
+      SELECT LAST_INSERT_ID() AS value
+    </selectKey>
+  </insert>
+
+  <update id="update" parameterClass="actionDO" >
+    UPDATE action   
+    <dynamic prepend="SET" >
+      <!--
+      <isNotNull property="id" prepend="," >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      -->
+      <isNotNull property="wid" prepend="," >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="eventName" prepend="," >
+        <![CDATA[  
+        event_name = #eventName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x1" prepend="," >
+        <![CDATA[  
+        x1 = #x1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y1" prepend="," >
+        <![CDATA[  
+        y1 = #y1#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="x2" prepend="," >
+        <![CDATA[  
+        x2 = #x2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="y2" prepend="," >
+        <![CDATA[  
+        y2 = #y2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="," >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="," >
+        <![CDATA[  
+        gmtModified = now()  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="," >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+     WHERE id = #id#  
+  </update>
+
+  <select id="findByPrimaryKey" parameterClass="java.lang.Integer" resultMap="actionDOResultMap" >
+     SELECT 
+    <include refid="action_do_columns" />
+    <![CDATA[  
+     FROM action a1 WHERE id = #id#
+    ]]>  
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM action WHERE id = #id#
+    ]]>  
+  </delete>
+  
+  <delete id="deleteByWid" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM action WHERE wid = #wid#
+    ]]>  
+  </delete>
+
+  <select id="countByDOExample" parameterClass="actionDO" resultClass="java.lang.Integer" >
+    SELECT COUNT(id) AS num FROM action 
+    <include refid="doQueryParams" />
+  </select>
+
+  <select id="findListByDO" resultMap="actionDOResultMap" parameterClass="actionDO" >
+     SELECT 
+    <include refid="action_do_columns" />
+     FROM action a1 
+    <include refid="doQueryParams" />
+  </select>
+</sqlMap>

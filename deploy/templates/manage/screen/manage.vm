@@ -1,0 +1,95 @@
+$!page.addStyleSheet("/css/manage/page/manageitem.css")
+#set( $tmpJs = $!page.scripts.add("/js/page/manage/manageItem.js") )
+
+<div class="doc">
+	<div class="content">
+    #if($!pageList.size() && $!pageList.size() > 0)
+    <!--table开始-->
+    <table class="item-table">
+
+        <thead>
+            <tr class="tr-title-line">
+                <th>网站id</th>
+                <th>网站url</th>
+                <th>waitTime</th>
+                <th>总操作次数</th>
+                <th>已执行次数</th>
+                <th>启动时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody border=1>
+        <form method="post" id="form1" name="form1" action="/manage/addOrUpdate.htm">
+		<input type="hidden" name="action" value="BirdHouseAction"/>
+		<input type="hidden" id="event_submit_do_addOrUpdate" name="event_submit_do_addOrUpdate" value="true" />
+		<input type="hidden" id="wid" name="wid" value=""/>
+            #if($!pageList.size() && $!pageList.size() > 0)
+            #set($paginator = $!pageList.paginator)
+            #set($i = 0)
+            #set($recordSize=$!pageList.size())
+                #foreach($websiteDO in $!pageList)
+                	#set($trClass="tr-line-whitesmoke")
+                	#if($velocityCount % 2 ==0 )
+                		#set($trClass="tr-line-white")
+                	#end
+                    <tr class="$trClass">
+                        <td title="$!websiteDO.id" class="tm-name"> 
+                        	${websiteDO.id}
+                        </td>
+                        <td title="$!websiteDO.url" class="tm-price"> $!{websiteDO.url} </td>
+                        <td class="tm-total-amount">$!{websiteDO.waitTime}</td>
+                        <td class="tm-total-amount">$!{websiteDO.times}</td>
+                        <td class="tm-total-amount">$!{serverMap.get(${websiteDO.id})}</td>
+                        <td class="tm-create-time" >$dateUtil.toLocaleString($!websiteDO.startdate,'yyyy-MM-dd HH:ss:mm')  </td>
+                        <td class="tm-operate">
+                            <a href="$!addOrUpdateUrl.addQueryData("wid", $!websiteDO.id)" target="_blank">修改</a>/
+                            <a href="javascript:doDelete($!websiteDO.id)">删除</a>/
+                            <a href="javascript:doStart($!websiteDO.id)">启动</a>/
+                            <a href="javascript:doStop($!websiteDO.id)">暂停</a>/
+                        </td>
+                    </tr>
+                #set($i = $i+1)
+                #end
+            #else
+            <p class="no-data"><span>&nbsp;</span></p>
+            #end
+          </form>
+        </tbody>
+    </table>
+    <!-- table结束 -->
+    ##分页
+    <div class="obj-pagination">
+         $control.setTemplate("common:page.vm").setParameter("pageList",$!pageList).setParameter("pageListLink",$!manageUrl)
+    </div> 
+    #else
+        <div class="no-data"><span>&nbsp;</span></div>
+    #end
+	</div>
+</div>
+<script type="text/javascript">
+
+function doDelete(wid){
+	if(confirm("确定要删除吗？")){
+		document.getElementById("wid").value=wid;
+		document.getElementById("event_submit_do_addOrUpdate").name="event_submit_do_Delete";
+		document.getElementById("form1").submit();
+	}
+}
+
+function doStart(wid){
+	if(confirm("确定要启动吗？")){
+		document.getElementById("wid").value=wid;
+		document.getElementById("event_submit_do_addOrUpdate").name="event_submit_do_Start";
+		document.getElementById("form1").submit();
+	}
+}
+
+function doStop(wid){
+	if(confirm("确定要暂停吗？")){
+		document.getElementById("wid").value=wid;
+		document.getElementById("event_submit_do_addOrUpdate").name="event_submit_do_Stop";
+		document.getElementById("form1").submit();
+	}
+}
+
+</script>

@@ -1,0 +1,455 @@
+package com.alibaba.china.opensql.task.service;
+
+import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.axis2.AxisFault;
+import org.springframework.beans.factory.InitializingBean;
+
+import com.alibaba.china.biee.client.MetadataServiceStub;
+import com.alibaba.china.biee.client.SAWSessionServiceStub;
+import com.alibaba.china.biee.client.WebCatalogServiceStub;
+import com.alibaba.china.biee.client.webservices.bi.oracle.Account;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetItemInfo;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetItemInfoResult;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetSubItems;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetSubItemsResult;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetSubjectAreas;
+import com.alibaba.china.biee.client.webservices.bi.oracle.GetSubjectAreasResult;
+import com.alibaba.china.biee.client.webservices.bi.oracle.ItemInfo;
+import com.alibaba.china.biee.client.webservices.bi.oracle.ItemInfoType;
+import com.alibaba.china.biee.client.webservices.bi.oracle.Logoff;
+import com.alibaba.china.biee.client.webservices.bi.oracle.Logon;
+import com.alibaba.china.biee.client.webservices.bi.oracle.LogonResult;
+import com.alibaba.china.biee.client.webservices.bi.oracle.NameValuePair;
+import com.alibaba.china.biee.client.webservices.bi.oracle.SASubjectArea;
+import com.alibaba.china.opensql.dao.daointerface.MarketDAO;
+import com.alibaba.china.opensql.dao.daointerface.ReportDAO;
+import com.alibaba.china.opensql.dao.dataobject.MarketDO;
+import com.alibaba.china.opensql.dao.dataobject.ReportDO;
+import com.alibaba.china.opensql.task.common.BieeServiceStub;
+import com.alibaba.china.opensql.task.common.FolderType;
+import com.alibaba.china.opensql.task.common.ReportType;
+import com.alibaba.china.opensql.task.vo.BieeParamsObject;
+import com.alibaba.common.lang.StringUtil;
+import com.alibaba.common.logging.Logger;
+import com.alibaba.common.logging.LoggerFactory;
+
+/**
+ * 类名: BieeExternalService
+ * 
+ * @Description: BIEE报表集市数据操作
+ * @author wb_xiaojun.wangxj 2011-10-31 下午01:39:04
+ */
+public class BieeExternalService implements InitializingBean {
+
+    private Logger              logger       = LoggerFactory.getLogger(BieeExternalService.class);
+    // 报表路径
+    private static final String SHARE_FOLDER = "/shared";
+    // 默认账户
+    private static final String ADMIN        = "Administrator";
+
+    private static final String ALL_TYPE     = "*";
+
+    private static final String TITLE_ONE    = " -> ";
+
+    private static final String TITLE_TWO    = "/";
+
+    private static final String DESCRIPTION  = "Desc";
+
+    private static final String DELETE       = "1";
+
+    private static final String SAVE         = "0";
+
+    private static final String SUCCESS      = "SUCCESS";
+
+    private BieeParamsObject    bieeParamsObject;
+
+    private BieeServiceStub     bieeServiceStub;
+
+    private ReportDAO           reportDAO;
+
+    private MarketDAO           marketDAO;
+
+    private Map<String, String> reportAll;
+
+    private Map<String, String> marketAll;
+
+    public BieeParamsObject getBieeParamsObject() {
+        return bieeParamsObject;
+    }
+
+    public void setBieeParamsObject(BieeParamsObject bieeParams) {
+        this.bieeParamsObject = bieeParams;
+    }
+
+    public BieeServiceStub getBieeServiceStub() {
+        return bieeServiceStub;
+    }
+
+    public void setBieeServiceStub(BieeServiceStub bieeServiceStub) {
+        this.bieeServiceStub = bieeServiceStub;
+    }
+
+    public ReportDAO getReportDAO() {
+        return reportDAO;
+    }
+
+    public void setReportDAO(ReportDAO reportDAO) {
+        this.reportDAO = reportDAO;
+    }
+
+    public MarketDAO getMarketDAO() {
+        return marketDAO;
+    }
+
+    public void setMarketDAO(MarketDAO marketDAO) {
+        this.marketDAO = marketDAO;
+    }
+
+    /**
+     * 执行biee报表和集市数据操作
+     */
+    public void doBieeExternal() {
+        logger.error("-------------------bieeExternal start to execute!!!-------------------------");
+        reportAll = new HashMap<String, String>();
+        marketAll = new HashMap<String, String>();
+        // 登录biee获得sessionid
+        LogonResult logonResult = getBieeLogonResult();
+        if (logonResult == null) {
+            return;
+        }
+        // 报表取数据保存操作
+        getBieeReportData(logonResult.getSessionID());
+        // 集市取数据保存操作
+        getBieeAnswerData(logonResult.getSessionID());
+        // 逻辑删除
+        retainAllBiee();
+        // 关闭session 退出会话
+        close(logonResult.getSessionID());
+        logger.error("-------------------bieeExternal end to execute!!!-------------------------");
+
+    }
+
+    /**
+     * 创建会话，登录biee
+     */
+    public LogonResult getBieeLogonResult() {
+        LogonResult logonResult = null;
+        if (bieeServiceStub == null || bieeParamsObject == null) {
+            return logonResult;
+        }
+        Logon logon = new Logon();
+        try {
+            SAWSessionServiceStub stub = bieeServiceStub.getSawSessionServiceStub();
+            logon.setName(bieeParamsObject.getUser());
+            logon.setPassword(bieeParamsObject.getPass());
+
+            logonResult = stub.logon(logon);
+            return logonResult;
+        } catch (RemoteException e) {
+            logger.error("Biee Log on error:" + e.toString(), e);
+            return logonResult;
+        }
+    }
+
+    /**
+     * 集市取数据
+     * 
+     * @param sessionid
+     * @return
+     */
+    private String getBieeAnswerData(String sessionid) {
+        MetadataServiceStub mstub = null;
+        SASubjectArea[] subAreas = null;
+        GetSubjectAreas subjectAreas = new GetSubjectAreas();
+        try {
+            mstub = bieeServiceStub.getMetadataServiceStub();
+            subjectAreas.setSessionID(sessionid);
+            GetSubjectAreasResult subAreaResult = mstub.getSubjectAreas(subjectAreas);
+            subAreas = subAreaResult.getSubjectArea();
+            
+            logger.error("------001------"+subAreas.length);
+            
+        } catch (Exception e) {
+            logger.error("Biee answer Log on error:" + e.toString(), e);
+        } finally {
+            if (mstub != null) {
+                try {
+                    mstub.cleanup();
+                } catch (AxisFault e) {
+                    logger.error("Biee answer cleanup Log on error:" + e.toString(), e);
+                }
+            }
+        }
+        if (subAreas == null) {
+            return SUCCESS;
+        }
+        for (SASubjectArea subArea : subAreas) {
+            logger.error("--------------jiangchsh----"+subArea.getDisplayName()+","+ subArea.getName());
+            doInsertAnswer(subArea.getDisplayName(), subArea.getName(), subArea.getDescription(), ADMIN);
+            marketAll.put(subArea.getName(), subArea.getDisplayName());
+        }
+        return SUCCESS;
+
+    }
+
+    /**
+     * 取集市数据保存数据库
+     */
+    private void doInsertAnswer(String marketName, String marketUrl, String description, String operator) {
+
+        if (StringUtil.isBlank(marketName) || StringUtil.isBlank(marketUrl)) {
+            return;
+        }
+        Map<String, String> hm = new HashMap<String, String>();
+        hm.put("marketName", marketName);
+        hm.put("marketUrl", marketUrl);
+        List<MarketDO> marketLists = marketDAO.getQuery(hm);
+
+        if (marketLists != null && marketLists.size() > 0) {
+            MarketDO entity = (MarketDO) marketLists.get(0);
+            entity.setMarketName(marketName);
+            entity.setMarketUrl(marketUrl);
+            marketDAO.updateMarket(entity);
+        } else {
+            MarketDO entity = new MarketDO();
+            entity.setFavTimes(0);
+            entity.setrStatus("0");
+            entity.setOperator(operator);
+            entity.setMarketName(marketName);
+            entity.setMarketUrl(marketUrl);
+            entity.setDescription(description);
+            marketDAO.insertMarket(entity);
+        }
+
+    }
+
+    /**
+     * 报表取数据
+     * 
+     * @param sessionid
+     * @return 状态
+     */
+    private String getBieeReportData(String sessionid) {
+        WebCatalogServiceStub wstub = null;
+        GetItemInfo getItemInfo = new GetItemInfo();
+        getItemInfo.setResolveLinks(true);
+        getItemInfo.setPath(SHARE_FOLDER);
+        getItemInfo.setSessionID(sessionid);
+        try {
+            wstub = bieeServiceStub.getWebCatalogServiceStub();
+
+            GetItemInfoResult itemInfo = wstub.getItemInfo(getItemInfo);
+
+            subChilds(itemInfo.get_return().getCaption(), itemInfo.get_return().getPath(), sessionid, wstub);
+
+            return SUCCESS;
+        } catch (Exception e) {
+            logger.error("Biee report Log on error:" + e.toString(), e);
+            return null;
+        } finally {
+            if (wstub != null) {
+                try {
+                    wstub.cleanup();
+                } catch (AxisFault e) {
+                    logger.error("Biee report  Log on cleanup error:" + e.toString(), e);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 取报表子目录文件
+     * 
+     * @throws RemoteException
+     */
+    private void subChilds(String parentName, String path, String sessionid, WebCatalogServiceStub wstub) throws RemoteException {
+
+        GetSubItems subItems = new GetSubItems();
+        subItems.setMask(ALL_TYPE);
+        subItems.setOptions(null);
+        subItems.setPath(path);
+        subItems.setResolveLinks(false);
+        subItems.setSessionID(sessionid);
+
+        GetSubItemsResult subItemResult = wstub.getSubItems(subItems);
+
+        ItemInfo[] arrChilds = subItemResult.getItemInfo();
+        if (arrChilds == null) {
+            return;
+        }
+        for (ItemInfo child : arrChilds) {
+
+            if (child.getType() == ItemInfoType.Folder) {
+                // 递归展示文件目录
+                subChilds(child.getCaption(), child.getPath(), sessionid, wstub);
+
+                continue;
+            }
+
+//            if (child.getSignature().equals(FolderType.dashboardfolder1.toString())) {
+//                System.out.println(child + "FolderType.dashboardfolder1.toString()...");
+//            }
+            
+            // FILE_TYPE：dashboardpageitem1_仪表盘
+            if (child.getType() == ItemInfoType.Object && child.getSignature().equals(FolderType.dashboardpageitem1.toString())) {
+                
+                doInsertReport(parentName, child.getCaption(), path, child.getCreator(), child.getItemProperties());
+
+            }
+
+        }
+
+    }
+
+    /**
+     * 取报表数据保存数据库
+     */
+    private void doInsertReport(String reportName, String childName, String reportUrl, Account account, NameValuePair[] nameVals) {
+
+        String newName = reportName;// + TITLE_ONE + childName;
+        if (StringUtil.isBlank(newName) || StringUtil.isBlank(reportUrl)) {
+            return;
+        }
+        String description = "";
+        if (nameVals != null) {
+            for (NameValuePair nameVal : nameVals) {
+                if (DESCRIPTION.equals(nameVal.getName())) {
+                    description = nameVal.getValue();
+                    break;
+                }
+            }
+        }
+        Map<String, String> hm = new HashMap<String, String>();
+
+        hm.put("reportName", newName);
+
+        hm.put("reportUrl", reportUrl);
+        String operator = "";
+        if (StringUtil.isBlank(account.getName())) {
+            operator = ADMIN;
+        } else {
+            operator = account.getName();
+        }
+
+        List<ReportDO> reportLists = reportDAO.getQuery(hm);
+        if (reportLists != null && reportLists.size() > 0) {
+            ReportDO entity = (ReportDO) reportLists.get(0);
+            entity.setReportName(newName);
+            entity.setReportUrl(reportUrl);
+            reportDAO.updateReport(entity);
+        } else {
+            ReportDO entity = new ReportDO();
+            entity.setFavTimes(0);
+            entity.setOperator(operator);
+            entity.setReportName(newName);
+            entity.setReportUrl(reportUrl);
+            entity.setDescription(description);
+            entity.setrStatus(SAVE);
+            entity.setReportType(ReportType.DASHBOARD.toString());
+            reportDAO.insertReport(entity);
+        }
+        reportAll.put(reportUrl/* + TITLE_TWO + childName */, reportName);
+
+    }
+
+    /**
+     * 逻辑删除bIEE已经删除的数据
+     */
+    private void retainAllBiee() {
+        Map<String, String> hm = new HashMap<String, String>();
+        List<ReportDO> listReport = reportDAO.getQuery(hm);
+        reportDelete(listReport);
+        List<MarketDO> listMarket = marketDAO.getQuery(hm);
+        marketDelete(listMarket);
+    }
+
+    /**
+     * 集市逻辑删除或者恢复数据
+     * 
+     * @param listMarket
+     */
+    private void marketDelete(List<MarketDO> listMarket) {
+        if (listMarket == null) {
+            return;
+        }
+        for (MarketDO entity : listMarket) {
+            if (marketAll.get(entity.getMarketUrl()) == null) {
+                entity.setrStatus(DELETE);// 逻辑删除
+                marketDAO.deleteMarket(entity);
+            } else {
+                if (DELETE.equals(entity.getrStatus())) {
+                    entity.setrStatus(SAVE);// 恢复正常
+                    marketDAO.deleteMarket(entity);
+                }
+            }
+        }
+    }
+
+    /**
+     * 报表逻辑删除或者恢复数据
+     * 
+     * @param listReport
+     */
+    private void reportDelete(List<ReportDO> listReport) {
+        if (listReport == null) {
+            return;
+        }
+        for (ReportDO entity : listReport) {
+            if (entity == null || entity.getReportName() == null) {
+                continue;
+            }
+            /*
+             * if (entity.getReportName().indexOf(TITLE_ONE) == -1) { continue; }
+             */
+            if (reportAll.get(entity.getReportUrl() /* + TITLE_TWO + entity.getReportName().split(TITLE_ONE)[1] */) == null) {
+                entity.setrStatus(DELETE);// 逻辑删除
+                reportDAO.deleteReport(entity);
+            } else {
+                if (DELETE.equals(entity.getrStatus())) {
+                    entity.setrStatus(SAVE);// 恢复正常
+                    reportDAO.deleteReport(entity);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 会话失效，登出
+     */
+    public void close(String sessionid) {
+        SAWSessionServiceStub stub = null;
+        try {
+            stub = bieeServiceStub.getSawSessionServiceStub();
+            if (stub != null) {
+                Logoff logoff = new Logoff();
+                logoff.setSessionID(sessionid);
+                stub.logoff(logoff);
+
+            }
+        } catch (RemoteException e) {
+            logger.error("Biee Log on SAWSessionServiceStub out error:" + e.toString(), e);
+        } finally {
+            if (stub != null) {
+                try {
+                    stub.cleanup();
+                } catch (AxisFault e) {
+                    logger.error("Biee Log on WebCatalogServiceStub cleanup error:" + e.toString(), e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        // TODO Auto-generated method stub
+        if (reportDAO == null || marketDAO == null) {
+            throw new Exception();
+        }
+    }
+}

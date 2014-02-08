@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="GB2312"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
+    default-autowire="byName">
+    
+	<bean id="birdHouseService" class="com.hlx.birdhouse.common.service.BirdHouseService"/>
+	
+	<bean id="actionService" class="com.hlx.birdhouse.common.service.mk.ActionService">
+		<property name="workDir" value="${birdhouse_task_dir}"/>
+	</bean>
+	
+	<bean id="changeIPService4Wirless" class="com.hlx.birdhouse.common.service.mk.ChangeIPService4Wirless">
+		<property name="changeipUrl" value="${birdhouse_changeip_url}"/>
+		<property name="changeipCode" value="${birdhouse_changeip_code}"/>
+		<property name="getipUrl" value="${birdhouse_getip_url}"/>
+	</bean>
+	
+	<bean id="changeIpService4Adsl" class="com.hlx.birdhouse.common.service.mk.ChangeIpService4Adsl">
+		<property name="adslTitle" value="${birdhouse_adsltitle}"/>
+		<property name="adslName" value="${birdhouse_adslname}"/>
+		<property name="adslPassword" value="${birdhouse_adslpassword}"/>
+		<property name="getipUrl" value="${birdhouse_getip_url}"/>
+	</bean>
+	
+	<bean id="actionDBService" class="com.hlx.birdhouse.common.service.mk.ActionDBService">
+		<property name="siteName" value="${birdhouse_task_siteName}"/>
+	</bean>	
+	
+</beans>

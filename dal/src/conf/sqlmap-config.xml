@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings useStatementNamespaces="true"/>
+    <sqlMap resource="sqlmap/sqlmap_Account.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_Item.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_ItemShare.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_OrderNumber.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_UserFens.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_UserOrder.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_ItemBatch.xml"/>
+    <sqlMap resource="sqlmap/sqlmap_MailAddr.xml"/>
+</sqlMapConfig>

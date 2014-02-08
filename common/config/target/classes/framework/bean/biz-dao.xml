@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans default-autowire="byName">
+    
+    <bean id="actionDAO" class="com.hlx.birdhouse.dal.biz.dal.dao.impl.ActionDAOImpl" parent="basebirdhouseSqlMapClientDAO"/>
+    <bean id="actionIpDAO" class="com.hlx.birdhouse.dal.biz.dal.dao.impl.ActionIpDAOImpl" parent="basebirdhouseSqlMapClientDAO"/>
+    <bean id="serverDAO" class="com.hlx.birdhouse.dal.biz.dal.dao.impl.ServerDAOImpl" parent="basebirdhouseSqlMapClientDAO"/>
+    <bean id="websiteDAO" class="com.hlx.birdhouse.dal.biz.dal.dao.impl.WebsiteDAOImpl" parent="basebirdhouseSqlMapClientDAO"/>
+    
+</beans>

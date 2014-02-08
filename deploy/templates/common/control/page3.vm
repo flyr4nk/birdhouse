@@ -1,0 +1,26 @@
+<div class="pagination clearfix">
+	<ul class="pull-right">
+		#set($paginator = $!pageList.paginator)
+		#set ( $pages = $paginator.getSlider(8))
+			
+		#if(!$paginator.isDisabledPage($paginator.previousPage))
+			<li><a href="javascript:submitPageForm($paginator.getPreviousPage(),'$pageListLink');" class="disabled" title="上一页">&laquo;</a></li>
+		#else
+			<li><a title="上一页">&laquo;</a></li>
+		#end
+
+		#foreach ($p in $pages)
+			#if ($paginator.isDisabledPage($p))
+				<li class="active"><a href="#">$p</a></li>
+			#else
+				<li><a href="javascript:submitPageForm($p,'$pageListLink');">$p</a></li>
+			#end
+		#end
+
+		#if(!$paginator.isDisabledPage($paginator.nextPage))
+			<li><a href="javascript:submitPageForm($paginator.getNextPage(),'$pageListLink');" class="next" title="下一页">&raquo;</a></li>
+		#else
+			<li><a title="下一页">&raquo;</a></li>
+		#end
+	</ul>
+</div>

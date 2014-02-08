@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:services="http://www.alibaba.com/schema/services"
+	xmlns:fm-conditions="http://www.alibaba.com/schema/services/form/conditions"
+	xmlns:fm-validators="http://www.alibaba.com/schema/services/form/validators"
+	xmlns="http://www.alibaba.com/schema/services/form/validators"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+        http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+        http://www.alibaba.com/schema/services/form/conditions http://localhost:8080/schema/services-form-conditions.xsd
+        http://www.alibaba.com/schema/services/form/validators http://localhost:8080/schema/services-form-validators.xsd
+        http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+    ">
+	<services:form postOnlyByDefault="true">
+		<services:group name="csrfCheck">
+			<services:field name="csrfToken">
+				<csrf-validator>
+					<message>提交的数据已过期</message>
+				</csrf-validator>
+			</services:field>
+		</services:group>
+		
+		<services:group name="fileUploadForm">
+			<services:field name="file" displayName="上传文件">
+			</services:field>
+		</services:group>
+		
+		<services:group name="createItemForm" extends="csrfCheck">
+			<services:field name="id" displayName="商品id">
+			</services:field>
+			<services:field name="name" displayName="商品名">
+				<required-validator message="必须填写${displayName}" />
+				<string-length-validator maxLength="50"
+					minLength="0">
+					<message>${displayName}长度不能超过50</message>
+				</string-length-validator>
+			</services:field>
+			<services:field name="price" displayName="市场参考价">
+				<required-validator message="必须填写${displayName}" />
+				<number-validator numberType="int" >
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+				<number-validator numberType="int" greaterThan="0">
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+			</services:field>
+			<services:field name="totalAmount" displayName="总份数">
+				<required-validator message="必须填写${displayName}" />
+				<number-validator numberType="int" >
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+				<number-validator numberType="int" greaterThan="0">
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+			</services:field>
+			<services:field name="picUrl" displayName="主图url">
+				<required-validator message="必须填写${displayName}" />
+				<string-length-validator maxLength="100"
+					minLength="0">
+					<message>${displayName}长度不能超过10</message>
+				</string-length-validator>
+			</services:field>
+			<services:field name="detail" displayName="商品详细信息">
+			</services:field>
+			<services:field name="picUri1" displayName="小图片url1">
+			</services:field>
+			<services:field name="picUri2" displayName="小图片url2">
+			</services:field>
+			<services:field name="picUri3" displayName="小图片url3">
+			</services:field>
+		</services:group>
+		
+		<services:group name="createItemBatchForm" extends="csrfCheck">
+			<services:field name="id" displayName="商品id">
+			</services:field>
+			<services:field name="name" displayName="商品名">
+			</services:field>
+			<services:field name="price" displayName="市场参考价">
+				<required-validator message="必须填写${displayName}" />
+				<number-validator numberType="int" >
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+				<number-validator numberType="int" greaterThan="0">
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+			</services:field>
+			<services:field name="totalAmount" displayName="总份数">
+				<required-validator message="必须填写${displayName}" />
+				<number-validator numberType="int" >
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+				<number-validator numberType="int" greaterThan="0">
+					<message>${displayName}必须是大于0整数</message>
+				</number-validator>
+			</services:field>
+			<services:field name="lastTime" displayName="截止时间">
+				<required-validator message="必须填写${displayName}" />
+				<!--   <date-validator format="yyyy-MM-dd hh:mm:ss">
+					<message>${displayName} 必须是日期，格式为yyyy-MM-dd hh:mm:ss</message>
+				</date-validator>     -->
+			</services:field>
+			<services:field name="batchNum" displayName="批次">
+			</services:field>
+			<services:field name="itemId" displayName="商品id">
+			</services:field>
+		</services:group>
+	</services:form>
+</beans:beans>

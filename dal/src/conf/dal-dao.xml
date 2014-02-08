@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+    default-autowire="byName">
+    <!-- ======================================================================== -->
+    <!--  DAO????^                                                             										  -->
+    <!-- ======================================================================== -->
+  
+    <bean id="accountDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.AccountDAOImpl"/>
+    <bean id="itemDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.ItemDAOImpl"/>
+    <bean id="itemShareDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.ItemShareDAOImpl"/>
+    <bean id="orderNumberDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.OrderNumberDAOImpl"/>
+    <bean id="userFensDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.UserFensDAOImpl"/>
+    <bean id="userOrderDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.UserOrderDAOImpl"/>
+    <bean id="itemBatchDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.ItemBatchDAOImpl"/>
+    <bean id="nickSessionDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.NickSessionDAOImpl"/>
+    <bean id="userRmbDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.UserRmbDAOImpl"/>
+    <bean id="mailAddrDAO" class="com.hlx.luckbuy.dal.biz.dal.dao.impl.MailAddrDAOImpl"/>
+    
+</beans>

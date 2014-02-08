@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:services="http://www.alibaba.com/schema/services" xmlns:uris="http://www.alibaba.com/schema/services/uris"
+	xmlns="http://www.alibaba.com/schema/services/uris"
+	xmlns:uri-interceptors="http://www.alibaba.com/schema/services/uris/interceptors"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+        http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+        http://www.alibaba.com/schema/services/uris http://localhost:8080/schema/services-uris.xsd
+        http://www.alibaba.com/schema/services/uris/interceptors http://localhost:8080/schema/services-uris-interceptors.xsd
+        http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+    ">
+
+	<services:uris>
+
+		<uri id="framework" exposed="true">
+			<serverURI>http://yunqigou.com:80</serverURI>
+		</uri>
+		
+		<uri id="indexUrl" exposed="true" extends="framework">
+			<path>home/index.htm</path>
+		</uri>
+		<uri id="detailUrl" exposed="true" extends="framework">
+			<path>home/detail.htm</path>
+		</uri>
+		<uri id="errorUrl" exposed="true" extends="framework">
+			<path>home/error.htm</path>
+		</uri>
+		<!-- 签到 -->
+		<uri id="checkinUrl" exposed="true" extends="framework">
+			<path>user/checkIn.htm</path>
+		</uri>
+		
+		<!-- 用户 登录相关-->
+		<uri id="taobaoLoginUrl" exposed="true" extends="framework">
+			<path>user/oauthTaobao.htm</path>
+		</uri>
+		<uri id="taobaoCallbackUrl" exposed="true" extends="framework">
+			<path>user/taobaoCallback.htm</path>
+		</uri>
+		
+		<uri id="qqLoginUrl" exposed="true" extends="framework">
+			<path>user/oauthQQ.htm</path>
+		</uri>
+		<uri id="qqCallbackUrl" exposed="true" extends="framework">
+			<path>user/QQCallback.htm</path>
+		</uri>
+		
+		<uri id="logoutUrl" exposed="true" extends="framework">
+			<path>user/logout.htm</path>
+		</uri>
+		
+		
+		<!-- 后台管理 -->
+		<uri id="modifyItemUrl" exposed="true" extends="framework">
+			<path>/manage/modifyItem.htm</path>
+		</uri>
+		
+		<uri id="createItemUrl" exposed="true" extends="framework">
+			<path>/manage/createItem.htm</path>
+		</uri>
+		
+		<uri id="manageItemUrl" exposed="true" extends="framework">
+			<path>/manage/manageItem.htm</path>
+		</uri>
+		
+		<uri id="upItemUrl" exposed="true" extends="framework">
+			<path>/manage/upItem.htm</path>
+		</uri>
+		
+		<uri id="upItemListUrl" exposed="true" extends="framework">
+			<path>/manage/upItemList.htm</path>
+		</uri>
+		
+		
+		<!-- 我的运气够 -->
+		<uri id="myOrderListUrl" exposed="true" extends="framework">
+			<path>/user/my_order_list.htm</path>
+		</uri>
+		<uri id="myRmbListUrl" exposed="true" extends="framework">
+			<path>/user/my_gold_coin_list.htm</path>
+		</uri>
+		<uri id="myFensListUrl" exposed="true" extends="framework">
+			<path>/user/my_fens_list.htm</path>
+		</uri>
+		<uri id="addCoinUrl" exposed="true" extends="framework">
+			<path>/user/add_coin.htm</path>
+		</uri>
+		<uri id="myProfileUrl" exposed="true" extends="framework">
+			<path>/user/my_profile.htm</path>
+		</uri>
+		
+		<!-- 帮助中心-->
+		<uri id="aboutUrl" exposed="true" extends="framework">
+			<path>/user/about.htm</path>
+		</uri>
+		<uri id="noticeUrl" exposed="true" extends="framework">
+			<path>/user/notice.htm</path>
+		</uri>
+		
+	</services:uris>
+</beans:beans>

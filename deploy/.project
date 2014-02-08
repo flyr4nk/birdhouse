@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+  <name>birdhouse.deploy</name>
+  <comment>Auto converted POM for deploy. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>birdhouse.bundle.war</project>
+    <project>birdhouse.common.config</project>
+    <project>birdhouse.web.common</project>
+    <project>birdhouse.biz.common</project>
+    <project>birdhouse.dal</project>
+    <project>birdhouse.web.home</project>
+    <project>birdhouse.web.manage</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

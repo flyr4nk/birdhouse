@@ -1,0 +1,7 @@
+<div class="lef-nav">
+	  <ul>
+	    <li class="nav-list"><a href="${indexUrl}">首页</a></li>
+		<li class="nav-list"><a href="${createItemUrl}">增加网站</a></li>
+		<li class="nav-list"><a href="${manageItemUrl}">网站管理</a></li>
+	  </ul>	
+</div>

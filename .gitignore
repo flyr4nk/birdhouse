@@ -1,0 +1,14 @@
+/deploy/target
+/biz/common/*.classpath
+/biz/common/*.project
+/bundle/war/*.classpath
+/bundle/war/*.project
+/dal/.classpath
+/dal/.project
+/output
+/web/home/target
+/web/user/.classpath
+/web/user/.project
+/antx.properties
+/antx.properties.sample
+/antx_.properties

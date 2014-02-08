@@ -1,0 +1,10 @@
+Last Configured at: Sat Feb 08 13:37:04 CST 2014
+
+Base URL: jar:file:/D:/workspace/birdhouse/task/target/birdhouse.task-uber.jar!/
+Descriptor: META-INF/autoconf/auto-config.xml
+
+Generating META-INF/autoconf/log4j.xml.vm => WORLDS-INF/classes/task/log4j.xml
+Generating META-INF/autoconf/webx/bean/task-service.xml => WORLDS-INF/classes/task/webx/bean/task-service.xml
+Generating META-INF/autoconf/webx/common/resources.xml => WORLDS-INF/classes/task/webx/common/resources.xml
+Generating META-INF/autoconf/webx/common/webx-component-and-root.xml => WORLDS-INF/classes/task/webx/common/webx-component-and-root.xml
+Generating META-INF/autoconf/webx/webx.xml => WORLDS-INF/classes/task/webx/webx.xml

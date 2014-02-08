@@ -1,0 +1,294 @@
+/*
+ * Copyright 2011 Alibaba.com All right reserved. This software is the confidential and proprietary information of
+ * Alibaba.com ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only
+ * in accordance with the terms of the license agreement you entered into with Alibaba.com.
+ */
+package com.alibaba.china.opensql.task.service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.alibaba.china.biz.common.util.PageList;
+import com.alibaba.china.opensql.biz.common.constants.TaskConstant;
+import com.alibaba.china.opensql.biz.common.service.SQLGeneraterService;
+import com.alibaba.china.opensql.dao.constants.Constants;
+import com.alibaba.china.opensql.dao.daointerface.TaskExecuteDAO;
+import com.alibaba.china.opensql.dao.daointerface.TaskSequenceDAO;
+import com.alibaba.china.opensql.dao.daointerface.UserSqlTemplateDAO;
+import com.alibaba.china.opensql.dao.daointerface.UserTaskDAO;
+import com.alibaba.china.opensql.dao.daointerface.UserTemplateParamDAO;
+import com.alibaba.china.opensql.dao.dataobject.TaskExecuteDO;
+import com.alibaba.china.opensql.dao.dataobject.TemplateMergeParamVO;
+import com.alibaba.china.opensql.dao.dataobject.TemplateMergeVO;
+import com.alibaba.china.opensql.dao.dataobject.UserTaskDO;
+import com.alibaba.china.opensql.dao.util.CommonDateUtil;
+import com.alibaba.china.opensql.dao.vo.TaskJsonVO;
+import com.alibaba.common.lang.StringUtil;
+import com.alibaba.common.logging.Logger;
+import com.alibaba.common.logging.LoggerFactory;
+
+/**
+ * 类TaskExecuteService.java的实现描述：TODO 类实现描述
+ * 
+ * @author wxj 2011-12-15 下午2:04:34
+ */
+public class TaskExecuteTaskService {
+
+    private Logger              logger     = LoggerFactory.getLogger(TaskExecuteTaskService.class);
+
+    /** 分页显示中每页显示的条数 */
+    private static final int    PAGE_COUNT = 50;
+
+    public static final int     PAGE_ONE   = 1;
+
+    public UserTaskDAO          userTaskDAO;
+
+    private TaskExecuteDAO      taskExecuteDAO;
+
+    public UserSqlTemplateDAO   userSqlTemplateDAO;
+
+    public UserTemplateParamDAO userTemplateParamDAO;
+
+    public SQLGeneraterService  sqlGeneraterService;
+
+    public String               jobsURL;
+
+    private TaskSequenceDAO     taskSequenceDAO;
+
+    public void setTaskSequenceDAO(TaskSequenceDAO taskSequenceDAO) {
+        this.taskSequenceDAO = taskSequenceDAO;
+    }
+
+    public void setJobsURL(String jobsURL) {
+        this.jobsURL = jobsURL;
+    }
+
+    public void setTaskExecuteDAO(TaskExecuteDAO taskExecuteDAO) {
+        this.taskExecuteDAO = taskExecuteDAO;
+    }
+
+    public void setSqlGeneraterService(SQLGeneraterService sqlGeneraterService) {
+        this.sqlGeneraterService = sqlGeneraterService;
+    }
+
+    public void setUserTemplateParamDAO(UserTemplateParamDAO userTemplateParamDAO) {
+        this.userTemplateParamDAO = userTemplateParamDAO;
+    }
+
+    public void setUserSqlTemplateDAO(UserSqlTemplateDAO userSqlTemplateDAO) {
+        this.userSqlTemplateDAO = userSqlTemplateDAO;
+    }
+
+    public void setUserTaskDAO(UserTaskDAO userTaskDAO) {
+        this.userTaskDAO = userTaskDAO;
+    }
+
+    /**
+     * 任务开始执行
+     */
+    @SuppressWarnings("deprecation")
+    public void doTaskExecute() {
+        logger.error("-------------------task start to execute!!!-------------------------");
+        int totalCount = 0;
+        try{
+            totalCount = userTaskDAO.queryUserTaskCount();
+    
+            PageList taskList = userTaskDAO.queryUserTaskList(PAGE_COUNT, totalCount, PAGE_ONE);
+            // 当前总共多少页
+            int totalPage = taskList.getTotalPage();
+    
+            // 循环每页需要执行的周期性任务
+            for (int i = 1; i < totalPage + 1; i++) {
+                taskList = doTaskExecute(totalCount, taskList, i);
+            }
+        }catch(Exception ex){
+            logger.error("TaskExecute is error!pls check it!!!",ex);
+        }
+        logger.error("-------------------task: " + totalCount + " count end to execute!!!-------------------");
+    }
+
+    /**
+     * 执行当前也所有数据
+     * 
+     * @param totalCount
+     * @param taskList
+     * @param i
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private PageList doTaskExecute(int totalCount, PageList taskList, int i) {
+        // 第一页已经查询了
+        if (i > 1) {
+            taskList = userTaskDAO.queryUserTaskList(PAGE_COUNT, totalCount, i);
+        }
+
+        List<Long> ids = new ArrayList<Long>();
+        Map<Long, UserTaskDO> userTaskMap = new HashMap<Long, UserTaskDO>();
+        for (UserTaskDO entity : (List<UserTaskDO>) taskList) {
+            ids.add(entity.getUserSqlTemplateId());
+            userTaskMap.put(entity.getUserSqlTemplateId(), entity);
+        }
+        if (ids.size() == 0) {
+            return taskList;
+        }
+        // 设置第n页 查询条件
+        Map<String, Object> idsMap = new HashMap<String, Object>();
+        idsMap.put("ids", ids);
+        // 根据idsMap查询条件获取第n页的TemplateMergeVOs
+        List<TemplateMergeVO> mergeVOs = userSqlTemplateDAO.fetchTemplateMergeVOs(idsMap);
+        // 根据idsMap查询条件获取第n页的TemplateMergeParamVOS的
+        List<TemplateMergeParamVO> mergeParamVOs = userTemplateParamDAO.queryTemplateMergeParamVOUserIDs(idsMap);
+
+        List<TaskExecuteDO> taskExecuteList = getTaskExecuteList(mergeParamVOs, mergeVOs, userTaskMap);
+        // 批量插入数据库
+        if (!taskExecuteList.isEmpty()) {
+            taskExecuteDAO.insertBatchTaskExecute(taskExecuteList);
+        }
+        return taskList;
+    }
+
+    /**
+     * 得到要插入数据库的集合
+     */
+    private List<TaskExecuteDO> getTaskExecuteList(List<TemplateMergeParamVO> mergeParamVOs,
+                                                   List<TemplateMergeVO> mergeVOs, Map<Long, UserTaskDO> userTaskMap) {
+
+        List<TaskExecuteDO> taskExecuteList = new ArrayList<TaskExecuteDO>();
+        // 转换TemplateMergeParamVOs为map(Map<String,List<TemplateMergeParamVO>>
+        if (mergeVOs == null) {
+            return taskExecuteList;
+        }
+        Map<Long, List<TemplateMergeParamVO>> paramMap = convertMap(mergeParamVOs);
+
+        // 循环遍历每条要执行的任务
+        for (TemplateMergeVO mergeVO : mergeVOs) {
+            UserTaskDO userTaskDO = userTaskMap.get(mergeVO.getUserTemplateId());
+            boolean isDo = isTaskDo(userTaskDO);
+            // 符合条件的生成task execute记录
+            if (!isDo) {
+                continue;
+            }
+            List<TemplateMergeParamVO> paramList = paramMap.get(mergeVO.getUserTemplateId());
+            Long projectId = taskSequenceDAO.fetchDHWId();
+            String sql = "";
+            String abFileName = "";
+            String cfgContent = "";
+            // 4.调用generatorSQL API
+            try {
+                sql = sqlGeneraterService.generatorSQL(mergeVO, paramList, projectId);
+                cfgContent = sqlGeneraterService.generatorCFG(mergeVO, paramList, projectId);
+                // 5.上传文件
+            } catch (Exception e) {
+                logger.error("insert DB  or  generatorCFG error on error:" + e.toString(), e);
+            }
+            abFileName = getCfgUrl(projectId);
+            // 插入当前要执行的任务
+            TaskExecuteDO executeDO = new TaskExecuteDO();
+            executeDO.setUserId(userTaskDO.getUserId());
+            executeDO.setTaskId(userTaskDO.getId());
+            executeDO.setTaskStatus(Constants.TASK_WAIT);
+            executeDO.setTaskType(userTaskDO.getTaskType());
+            executeDO.setResultStatus(Constants.TASK_WAIT);
+            executeDO.setSql(sql);
+            executeDO.setCfgPath(abFileName);
+            executeDO.setCfgContent(cfgContent);
+            executeDO.setCfgId(projectId);
+            executeDO.setGmtTaskStart(getTaskStart(userTaskDO));
+            taskExecuteList.add(executeDO);
+        }
+        return taskExecuteList;
+    }
+
+    /**
+     * 当前任务是否要执行（周期性任务）
+     * 
+     * @param userTaskDO
+     * @return
+     */
+    private boolean isTaskDo(UserTaskDO userTaskDO) {
+        if (userTaskDO == null) {
+            return false;
+        }
+        TaskJsonVO vo = userTaskDO.getTaskJsonVO();
+
+        if (vo == null) {
+            return false;
+        }
+
+        if (StringUtil.isEmpty(vo.getPeriodTime())) {
+            return false;
+        }
+        // 周期性任务开始时间是到了，如果到了看周期性设置是否是当天，如果没有到不执行由下个任务去执行
+        if (CommonDateUtil.isAfterNow(vo.getPeriodTime()) && vo.isToDay()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 生成获取cfg文件的url.
+     * @param dhwId 任务id.
+     * @return
+     */
+    private String getCfgUrl(long dhwId) {
+    	StringBuilder temp = new StringBuilder(this.jobsURL);
+    	temp.append("/").append(dhwId).append(TaskConstant.TAR_GZ_POFIX);
+    	return temp.toString();
+    }
+
+    /**
+     * 任务开始时间
+     * 
+     * @param userTaskDO
+     * @return
+     */
+    private Date getTaskStart(UserTaskDO userTaskDO) {
+        Date taskStart = null;
+        String periodTime = "";
+        if (userTaskDO == null) {
+            return null;
+        }
+        if (userTaskDO.getTaskJsonVO() == null) {
+            return null;
+        }
+
+        // 任务类型，周期性查
+        if (Constants.TASK_TYPE_SCHEDULE.equals(userTaskDO.getTaskType())) {
+            periodTime = userTaskDO.getTaskJsonVO().getPeriodTime();
+            taskStart = CommonDateUtil.getStartDate(periodTime);
+        }
+        return taskStart;
+    }
+
+    /**
+     * 转化为map key map值
+     * 
+     * @param mergeParamVOs
+     * @return
+     */
+    private Map<Long, List<TemplateMergeParamVO>> convertMap(List<TemplateMergeParamVO> mergeParamVOs) {
+        // TODO Auto-generated method stub
+        Map<Long, List<TemplateMergeParamVO>> map = new HashMap<Long, List<TemplateMergeParamVO>>();
+        List<TemplateMergeParamVO> paramlist = null;
+
+        for (TemplateMergeParamVO entity : mergeParamVOs) {
+            if (entity.getUserTemplateId() == null) {
+                continue;
+            }
+            paramlist = map.get(entity.getUserTemplateId());
+            if (paramlist == null) {
+                paramlist = new ArrayList<TemplateMergeParamVO>();
+            }
+            paramlist.add(entity);
+            map.put(entity.getUserTemplateId(), paramlist);
+        }
+
+        return map;
+
+    }
+
+}

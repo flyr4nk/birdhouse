@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="Website" >
+
+  <typeAlias alias="websiteDO" type="com.hlx.birdhouse.dal.biz.dal.dataobject.WebsiteDO" />
+
+  <resultMap id="websiteDOResultMap" class="websiteDO" >
+    <result property="id" column="id" />
+    <result property="url" column="url" />
+    <result property="times" column="times" />
+    <result property="startdate" column="startDate" />
+    <result property="gmtcreate" column="gmtCreate" />
+    <result property="gmtmodified" column="gmtModified" />
+    <result property="name" column="name" />
+    <result property="pwd" column="pwd" />
+    <result property="strvalue" column="strValue" />
+    <result property="strvalue2" column="strValue2" />
+    <result property="waitTime" column="waitTime" />
+  </resultMap>
+
+  <sql id="website_columns" >
+    a1.id, a1.url, a1.times, a1.startDate, a1.gmtCreate, a1.gmtModified, a1.name, a1.pwd, 
+      a1.strValue, a1.strValue2,a1.waitTime
+  </sql>
+
+  <sql id="website_do_columns" >
+    a1.id, a1.url, a1.times, a1.startDate, a1.gmtCreate, a1.gmtModified, a1.name, a1.pwd, 
+      a1.strValue, a1.strValue2,a1.waitTime
+  </sql>
+
+  <sql id="queryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="url" prepend="AND" >
+        <![CDATA[  
+        url = #url#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="times" prepend="AND" >
+        <![CDATA[  
+        times = #times#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="startdate" prepend="AND" >
+        <![CDATA[  
+        startDate = #startdate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="name" prepend="AND" >
+        <![CDATA[  
+        name = #name#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="pwd" prepend="AND" >
+        <![CDATA[  
+        pwd = #pwd#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="AND" >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue2" prepend="AND" >
+        <![CDATA[  
+        strValue2 = #strvalue2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="AND" >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <sql id="doQueryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="url" prepend="AND" >
+        <![CDATA[  
+        url = #url#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="times" prepend="AND" >
+        <![CDATA[  
+        times = #times#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="startdate" prepend="AND" >
+        <![CDATA[  
+        startDate = #startdate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="name" prepend="AND" >
+        <![CDATA[  
+        name = #name#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="pwd" prepend="AND" >
+        <![CDATA[  
+        pwd = #pwd#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="AND" >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue2" prepend="AND" >
+        <![CDATA[  
+        strValue2 = #strvalue2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="AND" >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <insert id="insert" parameterClass="websiteDO" >
+    INSERT INTO website( id, url, times, startDate, gmtCreate, gmtModified, name, 
+      pwd, strValue, strValue2,waitTime)
+     VALUES ( #id#, #url#, #times#, #startdate#, now(), now(), #name#, 
+      #pwd#, #strvalue#, #strvalue2#,#waitTime#)
+    <selectKey keyProperty="id" resultClass="java.lang.Integer" >
+      SELECT LAST_INSERT_ID() AS value
+    </selectKey>
+  </insert>
+
+  <update id="update" parameterClass="websiteDO" >
+    UPDATE website   
+    <dynamic prepend="SET" >
+      <!--
+      <isNotNull property="id" prepend="," >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      -->
+      <isNotNull property="url" prepend="," >
+        <![CDATA[  
+        url = #url#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="times" prepend="," >
+        <![CDATA[  
+        times = #times#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="startdate" prepend="," >
+        <![CDATA[  
+        startDate = #startdate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="," >
+        <![CDATA[  
+        gmtModified = now()  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="name" prepend="," >
+        <![CDATA[  
+        name = #name#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="pwd" prepend="," >
+        <![CDATA[  
+        pwd = #pwd#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue" prepend="," >
+        <![CDATA[  
+        strValue = #strvalue#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="strvalue2" prepend="," >
+        <![CDATA[  
+        strValue2 = #strvalue2#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="waitTime" prepend="," >
+        <![CDATA[  
+        waitTime = #waitTime#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+     WHERE id = #id#  
+  </update>
+
+  <select id="findByPrimaryKey" parameterClass="java.lang.Integer" resultMap="websiteDOResultMap" >
+     SELECT 
+    <include refid="website_do_columns" />
+    <![CDATA[  
+     FROM website a1 WHERE id = #id#
+    ]]>  
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM website WHERE id = #id#
+    ]]>  
+  </delete>
+
+  <select id="countByDOExample" parameterClass="websiteDO" resultClass="java.lang.Integer" >
+    SELECT COUNT(id) AS num FROM website 
+    <include refid="doQueryParams" />
+  </select>
+
+  <select id="findListByDO" resultMap="websiteDOResultMap" parameterClass="websiteDO" >
+     SELECT 
+    <include refid="website_do_columns" />
+     FROM website a1 
+    <include refid="doQueryParams" />
+  </select>
+  
+  <select id="queryAll" resultMap="websiteDOResultMap" parameterClass="int" >
+     SELECT 
+    <include refid="website_do_columns" />
+     FROM website a1 
+    limit #startIndex#,20
+  </select>
+  
+  
+</sqlMap>

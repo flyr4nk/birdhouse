@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool
+END
+IncrementalFeedDataTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool/IncrementalFeedDataTask.java
+END
+FullFeedDataTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool/FullFeedDataTask.java
+END
+TaskExecuteTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool/TaskExecuteTask.java
+END
+BieeExternalTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool/BieeExternalTask.java
+END
+IlibFollowTaskStarter.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/tool/IlibFollowTaskStarter.java
+END

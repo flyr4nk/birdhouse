@@ -1,0 +1,63 @@
+/**
+ * Project: jobs
+ * 
+ * Copyright 2008 Alibaba.com Croporation Limited.
+ * All rights reserved.
+ *
+ * This software is the confidential and proprietary information of
+ * Alibaba Company. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with Alibaba.com.
+ */
+package com.alibaba.china.opensql.task.tool;
+
+import java.io.File;
+
+import org.apache.log4j.Logger;
+
+import com.alibaba.china.opensql.opensearch.client.OpensearchJobs;
+import com.alibaba.china.opensql.task.AbstractMain;
+
+/**
+ * 定时启动增量build数据的任务类
+ * 
+ * @author star.qix
+ */
+public class IncrementalFeedDataTask extends AbstractMain {
+
+    private static final Logger logger = Logger.getLogger(IncrementalFeedDataTask.class);
+
+    protected IncrementalFeedDataTask(){
+        super(new File(getBaseDir()), "classpath/task/log4j.xml");
+    }
+
+    private static String getBaseDir() {
+        String basedir = System.getProperty("project.home");
+
+        if (basedir == null) {
+            System.setProperty("project.home", System.getProperty("user.dir", ""));
+        }
+
+        basedir = System.getProperty("project.home");
+        if (!basedir.endsWith(File.separator)) {
+            basedir += File.separator;
+        }
+
+        return basedir;
+    }
+
+    public static void main(String[] args) {
+
+        IncrementalFeedDataTask task = new IncrementalFeedDataTask();
+        OpensearchJobs job = (OpensearchJobs) task.getBean("opensearchJobs");
+        long startDate = System.currentTimeMillis();
+        logger.error(" job.incrementalIndex() start at : " + startDate);
+        job.incrementalIndexForTask();
+        long endtime = System.currentTimeMillis();
+        logger.error(" job.incrementalIndex() end at : " + (endtime - startDate));
+        task.exit();
+        System.exit(0);
+    }
+
+}

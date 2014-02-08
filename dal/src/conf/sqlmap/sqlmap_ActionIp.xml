@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="ActionIp" >
+
+  <typeAlias alias="actionIpDO" type="com.hlx.birdhouse.dal.biz.dal.dataobject.ActionIpDO" />
+
+  <resultMap id="actionIpDOResultMap" class="actionIpDO" >
+    <result property="id" column="id" />
+    <result property="wid" column="wid" />
+    <result property="ip" column="ip" />
+    <result property="gmtcreate" column="gmtCreate" />
+    <result property="gmtmodified" column="gmtModified" />
+  </resultMap>
+
+  <sql id="actionIp_columns" >
+    a1.id, a1.wid, a1.ip, a1.gmtCreate, a1.gmtModified
+  </sql>
+
+  <sql id="actionIp_do_columns" >
+    a1.id, a1.wid, a1.ip, a1.gmtCreate, a1.gmtModified
+  </sql>
+
+  <sql id="queryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="ip" prepend="AND" >
+        <![CDATA[  
+        ip = #ip#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <sql id="doQueryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="ip" prepend="AND" >
+        <![CDATA[  
+        ip = #ip#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <insert id="insert" parameterClass="actionIpDO" >
+    INSERT INTO action_ip( id, wid, ip, gmtCreate, gmtModified)
+     VALUES ( #id#, #wid#, #ip#,now(), now())
+    <selectKey keyProperty="id" resultClass="java.lang.Integer" >
+      SELECT LAST_INSERT_ID() AS value
+    </selectKey>
+  </insert>
+
+  <update id="update" parameterClass="actionIpDO" >
+    UPDATE action_ip   
+    <dynamic prepend="SET" >
+      <!--
+      <isNotNull property="id" prepend="," >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      -->
+      <isNotNull property="wid" prepend="," >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="ip" prepend="," >
+        <![CDATA[  
+        ip = #ip#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="," >
+        <![CDATA[  
+        gmtModified = now()  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+     WHERE id = #id#  
+  </update>
+
+  <select id="findByPrimaryKey" parameterClass="java.lang.Integer" resultMap="actionIpDOResultMap" >
+     SELECT 
+    <include refid="actionIp_do_columns" />
+    <![CDATA[  
+     FROM action_ip a1 WHERE id = #id#
+    ]]>  
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM action_ip WHERE id = #id#
+    ]]>  
+  </delete>
+
+  <select id="countByDOExample" parameterClass="actionIpDO" resultClass="java.lang.Integer" >
+    SELECT COUNT(id) AS num FROM action_ip 
+    <include refid="doQueryParams" />
+  </select>
+
+  <select id="findListByDO" resultMap="actionIpDOResultMap" parameterClass="actionIpDO" >
+     SELECT 
+    <include refid="actionIp_do_columns" />
+     FROM action_ip a1 
+    <include refid="doQueryParams" />
+  </select>
+</sqlMap>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config description="自动配置：opensql-task">
+    <group name="web" >
+  		<property name="opensql.loggingRoot" defaultValue="${opensql.output}/logs" description="log root "/>
+	    <property name="opensql.loggingLevel" defaultValue="debug" description="log level"/>
+    </group>
+	<group name="datasource" description="数据库">   
+ 		<property name="opensql.datasource" defaultValue="jdbc/opensqlDataSource" description="opensql "/>
+	    <property name="opensql.database.driver.url" defaultValue="jdbc:oracle:thin:@10.20.130.210:1521:dwtest" description=""/>
+	    <property name="opensql.database.driver.username" defaultValue="etl" description=""/>
+	    <property name="opensql.database.driver.password" defaultValue="etl" description=""/>
+	    <property name="opensql.database.driver.password.encrypted" description=""/>
+    </group>
+
+	<group name="biee" description="服务">
+        <property name="opensql.biee.domainName" defaultValue="172.16.194.103" description="数据仓库biee的访问域名"/>
+        <property name="opensql.biee.port" defaultValue="8080" description="数据仓库biee的访问端口"/>
+        <property name="opensql.biee.user" defaultValue="administrator" description="登录数据仓库biee的用户名"/>
+        <property name="opensql.biee.pass" defaultValue="admin1234" description="登录数据仓库biee的密码"/>
+    </group>
+    
+    <group name="mailTemplate" description="邮件模板">
+        <property name="opensql.task.mail.template" defaultValue="/home/admin/work/WORLDS-INF/templates/mail" description="邮件模板地址" />
+        <property name="opensql.task.ilib.charger.wwaccount" defaultValue="ze2200" description="指标库任务负责人旺旺号" />
+    </group>
+    
+    <script>
+        <generate template="task-services.xml.vm" destfile="WORLDS-INF/classes/task/task-services.xml" charset="GBK"/>
+        <generate template="biz-service.xml.vm" destfile="WORLDS-INF/classes/task/biz-service.xml" charset="GBK"/>     
+        <generate template="log4j.xml.vm" destfile="WORLDS-INF/classes/task/log4j.xml" charset="GBK"/>
+      
+        <generate template="task-common.xml.vm" destfile="WORLDS-INF/classes/task/task-common.xml" charset="GBK"/>
+        <generate template="task-resource.xml.vm" destfile="WORLDS-INF/classes/task/task-resource.xml" charset="GBK"/>
+		<generate template="bean-external.xml.vm" destfile="WORLDS-INF/classes/task/bean-external.xml" charset="GBK" />
+		<generate template="opensearch-jobs.xml.vm" destfile="WORLDS-INF/classes/task/opensearch-jobs.xml" charset="GBK" />
+
+		<generate template="bin/base_fun.sh.vm" destfile="bin/base_fun.sh" charset="GBK" />
+		<generate template="bin/crontab/BieeExternalTask.sh.vm" destfile="bin/crontab/BieeExternalTask.sh" charset="GBK" />
+		<generate template="bin/crontab/TaskExecuteTask.sh.vm" destfile="bin/crontab/TaskExecuteTask.sh" charset="GBK" />
+		<generate template="bin/crontab/FullFeedDataTask.sh.vm" destfile="bin/crontab/FullFeedDataTask.sh" charset="GBK" />
+		<generate template="bin/crontab/IncrementalFeedDataTask.sh.vm" destfile="bin/crontab/IncrementalFeedDataTask.sh" charset="GBK" />
+		<generate template="bin/crontab/IlibFollowTaskStarter.sh.vm" destfile="bin/crontab/IlibFollowTaskStarter.sh" charset="GBK" />
+		
+		<generate template="webx/webx.xml" destfile="WORLDS-INF/classes/task/webx/webx.xml"  charset="GBK" />
+		<generate template="webx/bean/task-service.xml" destfile="WORLDS-INF/classes/task/webx/bean/task-service.xml"  charset="GBK" />
+		<generate template="webx/common/resources.xml" destfile="WORLDS-INF/classes/task/webx/common/resources.xml"  charset="GBK" />
+		<generate template="webx/common/webx-component-and-root.xml" destfile="WORLDS-INF/classes/task/webx/common/webx-component-and-root.xml"  charset="GBK" />
+     </script>
+</config>

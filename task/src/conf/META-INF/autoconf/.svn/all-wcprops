@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/ali_cn/!svn/ver/418081/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf
+END
+log4j.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/log4j.xml.vm
+END
+biz-service.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/biz-service.xml.vm
+END
+opensearch-jobs.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/opensearch-jobs.xml.vm
+END
+task-services.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/task-services.xml.vm
+END
+bean-external.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/ali_cn/!svn/ver/418081/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/bean-external.xml.vm
+END
+task-resource.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/task-resource.xml.vm
+END
+task-common.xml.vm
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/ali_cn/!svn/ver/418081/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/task-common.xml.vm
+END
+auto-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/conf/META-INF/autoconf/auto-config.xml
+END

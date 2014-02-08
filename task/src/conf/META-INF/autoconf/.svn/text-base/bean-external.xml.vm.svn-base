@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd" 
+	default-autowire="byName">
+	<!-- ========= BIEE 服务 ========= -->
+	<!-- biee session -->
+	<bean id="bieeParamsObject" class="com.alibaba.china.opensql.task.vo.BieeParamsObject">
+		<property name="user">
+            <value>${opensql_biee_user}</value>
+		</property>
+		<property name="pass">
+            <value>${opensql_biee_pass}</value>
+		</property>
+ 	</bean>
+
+	<!-- biee stub -->
+	<bean id="bieeServiceStub" class="com.alibaba.china.opensql.task.common.BieeServiceStub">
+		<constructor-arg>
+			<value><![CDATA[http://${opensql_biee_domainName}:${opensql_biee_port}/analytics/saw.dll?SoapImpl=nQSessionService]]></value>
+		</constructor-arg>
+		<constructor-arg>
+			<value><![CDATA[http://${opensql_biee_domainName}:${opensql_biee_port}/analytics/saw.dll?SoapImpl=webCatalogService]]></value>
+		</constructor-arg>
+		<constructor-arg>
+			<value><![CDATA[http://${opensql_biee_domainName}:${opensql_biee_port}/analytics/saw.dll?SoapImpl=metadataService]]></value>
+		</constructor-arg>
+	</bean>
+ 
+</beans>

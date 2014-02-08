@@ -1,0 +1,296 @@
+$!page.addStyleSheet("/css/manage/page/createitem.css")
+
+<div class="doc">
+	<div class="content">
+	    <div class="c-title c-line-whiteSmoke">
+	        #if(${vo.websiteDO.id}) 修改网站,ID:${vo.websiteDO.id} #else 增加新网站  #end
+	    	#if(${isSuccess}) <strong><font color="red"> 操作成功!!!  </font></strong>  #end
+	    </div>
+		<form method="post" id="form1" action="/web/manage/addOrUpdate.htm">
+		<input type="hidden" name="action" value="BirdHouseAction"/>
+		<input type="hidden" name="event_submit_do_addOrUpdate" value="true" />
+		<input type="hidden" name="wid" value="$!{vo.websiteDO.id}"/>
+		<div class="formclass">
+			<table class="c-table">
+				<tr class="c-line-white">
+					<td class="c-td-name">网站Url：</td>
+					<td class="c-td-value">
+						<input type="text" name="url" value="$!{vo.websiteDO.url}">
+						<font color="red">*</font>
+					</td>
+				</tr>
+				<tr class="c-line-whiteSmoke">
+					<td class="c-td-name">总次数：</td>
+					<td class="c-td-value">
+						<input type="text" name="times" value="$!{vo.websiteDO.times}">
+						<font color="red">*</font>
+					</td>
+				</tr>
+				<tr class="c-line-whiteSmoke">
+					<td class="c-td-name">等待时间：</td>
+					<td class="c-td-value">
+						<input type="text" name="webWaitTime" value="$!{vo.websiteDO.waitTime}">
+						<font color="red">*</font>
+					</td>
+				</tr>
+				<tr class="c-line-white">
+					<td class="c-td-name">开始时间：</td>
+					#set ( $date = $!{vo.websiteDO.startdate} )
+					#set ( $year = $dateUtil.getDateValue($date,1) )
+					#set ( $month = $dateUtil.getDateValue($date,2) )
+					#set ( $dd = $dateUtil.getDateValue($date,3) )
+					#set ( $hh = $dateUtil.getDateValue($date,4) )
+					#set ( $mm = $dateUtil.getDateValue($date,5) )
+					<td class="c-td-value">
+						<select name="year">
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2013")) selected #end >2013</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2014")) selected #end >2014</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2015")) selected #end >2015</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2016")) selected #end >2016</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2017")) selected #end >2017</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$year","2018")) selected #end >2018</option>
+						</select>年 
+						<select name="month">
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","0")) selected #end>01</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","1")) selected #end>02</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","2")) selected #end>03</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","3")) selected #end>04</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","4")) selected #end>05</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","5")) selected #end>06</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","6")) selected #end>07</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","7")) selected #end>08</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","8")) selected #end>09</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","9")) selected #end>10</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","10")) selected #end>11</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$month","11")) selected #end>12</option>
+						</select>月
+						<select name="dd">
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","1")) selected #end>01</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","2")) selected #end>02</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","3")) selected #end>03</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","4")) selected #end>04</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","5")) selected #end>05</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","6")) selected #end>06</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","7")) selected #end>07</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","8")) selected #end>08</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","9")) selected #end>09</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","10")) selected #end>10</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","11")) selected #end>11</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","12")) selected #end>12</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","13")) selected #end>13</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","14")) selected #end>14</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","15")) selected #end>15</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","16")) selected #end>16</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","17")) selected #end>17</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","18")) selected #end>18</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","19")) selected #end>19</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","20")) selected #end>20</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","21")) selected #end>21</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","22")) selected #end>22</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","23")) selected #end>23</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","24")) selected #end>24</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","25")) selected #end>25</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","26")) selected #end>26</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","27")) selected #end>27</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","28")) selected #end>28</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","29")) selected #end>29</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","30")) selected #end>30</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$dd","31")) selected #end>31</option>
+						</select>日&nbsp;&nbsp;&nbsp;&nbsp;
+						<select name="hh">
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","0")) selected #end>00</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","1")) selected #end>01</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","2")) selected #end>02</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","3")) selected #end>03</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","4")) selected #end>04</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","5")) selected #end>05</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","6")) selected #end>06</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","7")) selected #end>07</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","8")) selected #end>08</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","9")) selected #end>09</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","10")) selected #end>10</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","11")) selected #end>11</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","12")) selected #end>12</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","13")) selected #end>13</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","14")) selected #end>14</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","15")) selected #end>15</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","16")) selected #end>16</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","17")) selected #end>17</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","18")) selected #end>18</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","19")) selected #end>19</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","20")) selected #end>20</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","21")) selected #end>21</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","22")) selected #end>22</option>
+						   <option #if($stringUtil.isEqualsIgnoreCase("$hh","23")) selected #end>23</option>
+						</select>时&nbsp;
+						<select name="mm">
+						   <option value="00" #if($stringUtil.isEqualsIgnoreCase("$mm",'0')) selected #end>00</option>
+						   <option value="05" #if($stringUtil.isEqualsIgnoreCase("$mm",'5')) selected #end>05</option>
+						   <option value="10" #if($stringUtil.isEqualsIgnoreCase("$mm",'10')) selected #end>10</option>
+						   <option value="15" #if($stringUtil.isEqualsIgnoreCase("$mm",'15')) selected #end>15</option>
+						   <option value="20" #if($stringUtil.isEqualsIgnoreCase("$mm",'20')) selected #end>20</option>
+						   <option value="25" #if($stringUtil.isEqualsIgnoreCase("$mm",'25')) selected #end>25</option>
+						   <option value="30" #if($stringUtil.isEqualsIgnoreCase("$mm",'30')) selected #end>30</option>
+						   <option value="35" #if($stringUtil.isEqualsIgnoreCase("$mm",'35')) selected #end>35</option>
+						   <option value="40" #if($stringUtil.isEqualsIgnoreCase("$mm",'40')) selected #end>40</option>
+						   <option value="45" #if($stringUtil.isEqualsIgnoreCase("$mm",'45')) selected #end>45</option>
+						   <option value="50" #if($stringUtil.isEqualsIgnoreCase("$mm",'50')) selected #end>50</option>
+						   <option value="55" #if($stringUtil.isEqualsIgnoreCase("$mm",'55')) selected #end>55</option>
+						</select>分
+						
+						<font color="red">* 格式：yyyy-MM-dd HH:ss:mm</font>
+					</td>
+				</tr>
+				<span id="zb">
+					<tr class="c-line-white">
+						<td class="c-td-name">事件1：</td>
+						<td class="c-td-value">
+						#set ( $actionDO = ${vo.actionList.get(0)} )
+						#set ( $eventName = $!{actionDO.eventName} )
+						#set ( $x1 = $!{actionDO.x1} )
+						#set ( $y1 = $!{actionDO.y1} )
+						#set ( $x2 = $!{actionDO.x2} )
+						#set ( $y2 = $!{actionDO.y2} )
+						#set ( $waitTime = $!{actionDO.waitTime} )
+						    event:<select name="eventName">
+						    		<option #if($stringUtil.isEqualsIgnoreCase("$eventName",'')) selected #end></option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'click')) selected #end>click</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'drag')) selected #end>drag</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'rclick')) selected #end>rclick</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'dclick')) selected #end>dclick</option>
+						           </select>&nbsp;
+						    <input type="hidden" name="actionId" value="$!{actionDO.id}">&nbsp;
+							x1:<input type="text" name="x1" value="$!{x1}">&nbsp;
+							y1:<input type="text" name="y1" value="$!{y1}">&nbsp;
+							x2:<input type="text" name="x2" value="$!{x2}">&nbsp;
+							y2:<input type="text" name="y2" value="$!{y2}">&nbsp;
+							waitTime:<input type="text" name="waitTime" value="$!{waitTime}">&nbsp;
+							<font color="red">*</font>
+						</td>
+					</tr>
+					<tr class="c-line-white">
+						<td class="c-td-name">事件2：</td>
+						<td class="c-td-value">
+						#set ( $actionDO = ${vo.actionList.get(1)} )
+						#set ( $eventName = $!{actionDO.eventName} )
+						#set ( $x1 = $!{actionDO.x1} )
+						#set ( $y1 = $!{actionDO.y1} )
+						#set ( $x2 = $!{actionDO.x2} )
+						#set ( $y2 = $!{actionDO.y2} )
+						#set ( $waitTime = $!{actionDO.waitTime} )
+						    event:<select name="eventName">
+						    		<option #if($stringUtil.isEqualsIgnoreCase("$eventName",'')) selected #end></option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'click')) selected #end>click</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'drag')) selected #end>drag</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'rclick')) selected #end>rclick</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'dclick')) selected #end>dclick</option>
+						           </select>&nbsp;
+						    <input type="hidden" name="actionId" value="$!{actionDO.id}">&nbsp;
+							x1:<input type="text" name="x1" value="$!{x1}">&nbsp;
+							y1:<input type="text" name="y1" value="$!{y1}">&nbsp;
+							x2:<input type="text" name="x2" value="$!{x2}">&nbsp;
+							y2:<input type="text" name="y2" value="$!{y2}">&nbsp;
+							waitTime:<input type="text" name="waitTime" value="$!{waitTime}">&nbsp;
+							<font color="red">*</font>
+						</td>
+					</tr>
+					<tr class="c-line-white">
+						<td class="c-td-name">事件3：</td>
+						<td class="c-td-value">
+						#set ( $actionDO = ${vo.actionList.get(2)} )
+						#set ( $eventName = $!{actionDO.eventName} )
+						#set ( $x1 = $!{actionDO.x1} )
+						#set ( $y1 = $!{actionDO.y1} )
+						#set ( $x2 = $!{actionDO.x2} )
+						#set ( $y2 = $!{actionDO.y2} )
+						#set ( $waitTime = $!{actionDO.waitTime} )
+						    event:<select name="eventName">
+						    		<option #if($stringUtil.isEqualsIgnoreCase("$eventName",'')) selected #end></option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'click')) selected #end>click</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'drag')) selected #end>drag</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'rclick')) selected #end>rclick</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'dclick')) selected #end>dclick</option>
+						           </select>&nbsp;
+						    <input type="hidden" name="actionId" value="$!{actionDO.id}">&nbsp;
+							x1:<input type="text" name="x1" value="$!{x1}">&nbsp;
+							y1:<input type="text" name="y1" value="$!{y1}">&nbsp;
+							x2:<input type="text" name="x2" value="$!{x2}">&nbsp;
+							y2:<input type="text" name="y2" value="$!{y2}">&nbsp;
+							waitTime:<input type="text" name="waitTime" value="$!{waitTime}">&nbsp;
+							<font color="red">*</font>
+						</td>
+					</tr>
+					<tr class="c-line-white">
+						<td class="c-td-name">事件4：</td>
+						<td class="c-td-value">
+						#set ( $actionDO = ${vo.actionList.get(3)} )
+						#set ( $eventName = $!{actionDO.eventName} )
+						#set ( $x1 = $!{actionDO.x1} )
+						#set ( $y1 = $!{actionDO.y1} )
+						#set ( $x2 = $!{actionDO.x2} )
+						#set ( $y2 = $!{actionDO.y2} )
+						#set ( $waitTime = $!{actionDO.waitTime} )
+						    event:<select name="eventName">
+						    		<option #if($stringUtil.isEqualsIgnoreCase("$eventName",'')) selected #end></option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'click')) selected #end>click</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'drag')) selected #end>drag</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'rclick')) selected #end>rclick</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$eventName",'dclick')) selected #end>dclick</option>
+						           </select>&nbsp;
+						    <input type="hidden" name="actionId" value="$!{actionDO.id}">&nbsp;
+							x1:<input type="text" name="x1" value="$!{x1}">&nbsp;
+							y1:<input type="text" name="y1" value="$!{y1}">&nbsp;
+							x2:<input type="text" name="x2" value="$!{x2}">&nbsp;
+							y2:<input type="text" name="y2" value="$!{y2}">&nbsp;
+							waitTime:<input type="text" name="waitTime" value="$!{waitTime}">&nbsp;
+							<font color="red">*</font>
+						</td>
+					</tr>
+				</span>
+				<span id="server">
+					<tr class="c-line-whiteSmoke">
+						<td class="c-td-name">站点1：</td>
+						#set ( $serverDO = ${vo.serverDOList.get(0)} )
+						#set ( $siteName = $!{serverDO.siteName} )
+						#set ( $nTimes = $!{serverDO.nTimes} )
+						<td class="c-td-value">
+							siteName:
+								<select name="siteName">
+									<option #if($stringUtil.isEqualsIgnoreCase("$siteName",'')) selected #end></option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$siteName",'hz')) selected #end>hz</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$siteName",'sh')) selected #end>sh</option>
+						           </select>&nbsp; 
+							操作次数:<input type="text" name="nTimes" value="$!{nTimes}">
+							<input type="hidden" name="serverId" value="$!{serverDO.id}">&nbsp;
+						</td>
+					</tr>
+					<tr class="c-line-whiteSmoke">
+						<td class="c-td-name">站点2：</td>
+						#set ( $serverDO = ${vo.serverDOList.get(1)} )
+						#set ( $siteName = $!{serverDO.siteName} )
+						#set ( $nTimes = $!{serverDO.nTimes} )
+						<td class="c-td-value">
+							siteName:
+								<select name="siteName">
+									<option #if($stringUtil.isEqualsIgnoreCase("$siteName",'')) selected #end></option>
+									<option #if($stringUtil.isEqualsIgnoreCase("$siteName",'hz')) selected #end>hz</option>
+						            <option #if($stringUtil.isEqualsIgnoreCase("$siteName",'sh')) selected #end>sh</option>
+						           </select>&nbsp;
+							操作次数:<input type="text" name="nTimes" value="$!{nTimes}">
+							<input type="hidden" name="serverId" value="$!{serverDO.id}">&nbsp;
+						</td>
+					</tr>
+				</span>
+				
+				<tr class="c-line-white">
+					<td class="c-td-name">
+						<input type="submit" name="submit11" value="提交"  >
+					</td>
+					<td class="c-td-value"><input type="reset" name="reset11" value="重置" ></td>
+				</tr>
+			</table>
+		</div>
+		</form>
+	</div>
+</div>
+

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="Server" >
+
+  <typeAlias alias="serverDO" type="com.hlx.birdhouse.dal.biz.dal.dataobject.ServerDO" />
+
+  <resultMap id="serverDOResultMap" class="serverDO" >
+    <result property="id" column="id" />
+    <result property="siteName" column="site_name" />
+    <result property="wid" column="wid" />
+    <result property="nTimes" column="n_times" />
+    <result property="dTimes" column="d_times" />
+    <result property="status" column="status" />
+    <result property="gmtcreate" column="gmtCreate" />
+    <result property="gmtmodified" column="gmtModified" />
+  </resultMap>
+
+  <sql id="server_columns" >
+    a1.id, a1.site_name, a1.wid, a1.n_times, a1.d_times, a1.status, a1.gmtCreate, a1.gmtModified
+      
+  </sql>
+
+  <sql id="server_do_columns" >
+    a1.id, a1.site_name, a1.wid, a1.n_times, a1.d_times, a1.status, a1.gmtCreate, a1.gmtModified
+      
+  </sql>
+
+  <sql id="queryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="siteName" prepend="AND" >
+        <![CDATA[  
+        site_name = #siteName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="nTimes" prepend="AND" >
+        <![CDATA[  
+        n_times = #nTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="dTimes" prepend="AND" >
+        <![CDATA[  
+        d_times = #dTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="status" prepend="AND" >
+        <![CDATA[  
+        status = #status#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <sql id="doQueryParams" >
+    <dynamic prepend="WHERE" >
+      <isNotNull property="id" prepend="AND" >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="siteName" prepend="AND" >
+        <![CDATA[  
+        site_name = #siteName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="AND" >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="nTimes" prepend="AND" >
+        <![CDATA[  
+        n_times = #nTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="dTimes" prepend="AND" >
+        <![CDATA[  
+        d_times = #dTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="status" prepend="AND" >
+        <![CDATA[  
+        status = #status#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtcreate" prepend="AND" >
+        <![CDATA[  
+        gmtCreate = #gmtcreate#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="AND" >
+        <![CDATA[  
+        gmtModified = #gmtmodified#  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <insert id="insert" parameterClass="serverDO" >
+    INSERT INTO server( id, site_name, wid, n_times, d_times, status, gmtCreate, gmtModified
+      )
+     VALUES ( #id#, #siteName#, #wid#, #nTimes#, #dTimes#, #status#, now(), now()
+      )
+    <selectKey keyProperty="id" resultClass="java.lang.Integer" >
+      SELECT LAST_INSERT_ID() AS value
+    </selectKey>
+  </insert>
+
+  <update id="update" parameterClass="serverDO" >
+    UPDATE server   
+    <dynamic prepend="SET" >
+      <!--
+      <isNotNull property="id" prepend="," >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      -->
+      <isNotNull property="siteName" prepend="," >
+        <![CDATA[  
+        site_name = #siteName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="," >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="nTimes" prepend="," >
+        <![CDATA[  
+        n_times = #nTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="dTimes" prepend="," >
+        <![CDATA[  
+        d_times = #dTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="status" prepend="," >
+        <![CDATA[  
+        status = #status#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="," >
+        <![CDATA[  
+        gmtModified = now()  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+     WHERE id = #id#  
+  </update>
+  
+  <update id="updateStatus" parameterClass="serverDO" >
+    UPDATE server   
+    <dynamic prepend="SET" >
+      <!--
+      <isNotNull property="id" prepend="," >
+        <![CDATA[  
+        id = #id#  
+        ]]>  
+      </isNotNull>
+      -->
+      <isNotNull property="siteName" prepend="," >
+        <![CDATA[  
+        site_name = #siteName#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="wid" prepend="," >
+        <![CDATA[  
+        wid = #wid#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="nTimes" prepend="," >
+        <![CDATA[  
+        n_times = #nTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="dTimes" prepend="," >
+        <![CDATA[  
+        d_times = #dTimes#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="status" prepend="," >
+        <![CDATA[  
+        status = #status#  
+        ]]>  
+      </isNotNull>
+      <isNotNull property="gmtmodified" prepend="," >
+        <![CDATA[  
+        gmtModified = now()  
+        ]]>  
+      </isNotNull>
+    </dynamic>
+  </update>
+
+  <select id="findByPrimaryKey" parameterClass="java.lang.Integer" resultMap="serverDOResultMap" >
+     SELECT 
+    <include refid="server_do_columns" />
+    <![CDATA[  
+     FROM server a1 WHERE id = #id#
+    ]]>  
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM server WHERE id = #id#
+    ]]>  
+  </delete>
+  
+  <delete id="deleteByWid" parameterClass="java.lang.Integer" >
+    <![CDATA[  
+     DELETE FROM server WHERE wid = #wid#
+    ]]>  
+  </delete>
+
+  <select id="countByDOExample" parameterClass="serverDO" resultClass="java.lang.Integer" >
+    SELECT COUNT(id) AS num FROM server 
+    <include refid="doQueryParams" />
+  </select>
+
+  <select id="findListByDO" resultMap="serverDOResultMap" parameterClass="serverDO" >
+     SELECT 
+    <include refid="server_do_columns" />
+     FROM server a1 
+    <include refid="doQueryParams" />
+  </select>
+</sqlMap>

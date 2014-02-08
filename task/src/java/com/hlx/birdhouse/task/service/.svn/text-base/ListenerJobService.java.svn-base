@@ -1,0 +1,11 @@
+package com.alibaba.china.opensql.task.service;
+
+import java.util.Date;
+
+public interface ListenerJobService {
+
+    public boolean executeFullFeedData();
+
+    public boolean executeIncrementalFeedData(Date date);
+
+}

@@ -1,0 +1,31 @@
+package com.alibaba.china.opensql.task.tool;
+
+import java.util.Date;
+
+import com.alibaba.china.opensql.task.WebxEnvMain;
+import com.alibaba.china.opensql.task.service.ilib.IlibTaskService;
+import com.alibaba.common.logging.Logger;
+import com.alibaba.common.logging.LoggerFactory;
+
+/**
+ * 用户关注指标监控类.
+ * @author dachun.daidc
+ *
+ */
+public class IlibFollowTaskStarter extends WebxEnvMain {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(IlibFollowTaskStarter.class);
+	
+	public static void main(String[] args) {
+		IlibFollowTaskStarter starter = new IlibFollowTaskStarter();
+		IlibTaskService ilibTaskService = (IlibTaskService) starter.getBean("ilibTaskService");
+		LOGGER.error("iilb user follow index task start at: " + new Date());
+		ilibTaskService.sendFollowIndexStatData();
+		LOGGER.error("iilb user follow index task end at: " + new Date());
+		LOGGER.error("iilb user follow subject task start at: " + new Date());
+		ilibTaskService.sendFollowCategoryStatData();
+		LOGGER.error("iilb user follow subject task end at: " + new Date());
+		starter.exit();
+		System.exit(0);
+	}
+}

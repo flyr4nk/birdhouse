@@ -1,0 +1,43 @@
+package com.alibaba.china.opensql.task.tool;
+
+import java.io.File;
+
+import com.alibaba.china.opensql.task.AbstractMain;
+import com.alibaba.china.opensql.task.service.BieeExternalService;
+
+/**
+ * 类名: BieeExternalTask
+ * 
+ * @Description: 执行biee任务
+ * @author wb_xiaojun.wangxj 2011-10-31 下午01:40:53
+ */
+public class BieeExternalTask extends AbstractMain {
+
+    protected BieeExternalTask(){
+        super(new File(getBaseDir()), "classpath/task/log4j.xml");
+    }
+
+    private static String getBaseDir() {
+        String basedir = System.getProperty("project.home");
+
+        if (basedir == null) {
+            System.setProperty("project.home", System.getProperty("user.dir", ""));
+        }
+
+        basedir = System.getProperty("project.home");
+        if (!basedir.endsWith(File.separator)) {
+            basedir += File.separator;
+        }
+
+        return basedir;
+    }
+
+    public static void main(String[] args) {
+        BieeExternalTask task = new BieeExternalTask();
+        BieeExternalService BieeService = (BieeExternalService) task.getBean("bieeExternalService");
+        BieeService.doBieeExternal();
+        task.exit();
+        System.exit(0);
+    }
+
+}

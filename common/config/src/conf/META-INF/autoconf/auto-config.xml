@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config description="">
+	
+	<group name="web">
+		<property name="birdhouse.output" description=""/>
+	    <property name="birdhouse.deployhome" description=""/>
+	    <property name="birdhouse.templates" description=""/>
+	    <property name="birdhouse.loggingRoot" defaultValue="${birdhouse.output}/logs" description="log root "/>
+	    <property name="birdhouse.loggingLevel" defaultValue="warn" description="log level"/>
+		<property name="birdhouse.domainName" defaultValue="zgnet.com" description="login serve"/>
+	</group>
+	
+	<group name="datasource">
+	    <property name="birdhouse.datasource" defaultValue="jdbc/birdhouseDataSource" description="birdhouse 数据源"/>
+	    <property name="birdhouse.database.driver.url" defaultValue="jdbc:mysql://localhost:3306/birdhouse" description=""/>
+	    <property name="birdhouse.database.driver.username" defaultValue="root" description=""/>
+	    <property name="birdhouse.database.driver.password" defaultValue="admin" description=""/>
+	</group>
+	
+	<group name="task">
+	    <property name="birdhouse.task.dir" defaultValue="d:/vbs/" description="birdhouse task 工作目录"/>
+	    <property name="birdhouse.changeip.url" defaultValue="http://192.168.1.1/userRpm/SysRebootRpm.htm?Reboot=%D6%D8%C6%F4%C2%B7%D3%C9%C6%F7" description=""/>
+	    <property name="birdhouse.changeip.code" defaultValue="Basic YWRtaW46SmlhbmdjaHNoNjIw" description=""/>
+	    <property name="birdhouse.getip.url" defaultValue="http://127.0.0.1:7001/home/getIp.do" description=""/>
+	    <property name="birdhouse.adsltitle" defaultValue="Vnet_PPPoE" description=""/>
+	     <property name="birdhouse.adslname" defaultValue="18005887984" description=""/>
+	      <property name="birdhouse.adslpassword" defaultValue="123789" description=""/>
+	       <property name="birdhouse.task.siteName" defaultValue="hz" description=""/>
+	</group>
+	
+	<script>
+	    <generate template="biz-service.xml.vm" destfile="framework/bean/biz-service.xml" charset="GBK"/>
+		<generate template="datasource.xml.vm" destfile="framework/bean/datasource.xml" charset="GBK"/>
+	</script>
+
+</config>

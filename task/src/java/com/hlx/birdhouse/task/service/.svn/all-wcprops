@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/ali_cn/!svn/ver/418067/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/service
+END
+ListenerJobService.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/service/ListenerJobService.java
+END
+BieeExternalService.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/repos/ali_cn/!svn/ver/418067/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/service/BieeExternalService.java
+END
+TaskExecuteTaskService.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/repos/ali_cn/!svn/ver/418055/misc/jobs/branches/20120725_159141_1/task/src/java/com/alibaba/china/opensql/task/service/TaskExecuteTaskService.java
+END
