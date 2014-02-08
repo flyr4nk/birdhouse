@@ -1,0 +1,3 @@
+Dim url,eventStr  
+url =  "http://www.toutoupiao.com/showvote-4368.html"    
+eventStr ="click_205_461_0_0|click_222_579_0_0"   
